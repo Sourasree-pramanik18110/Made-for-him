@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Happy Boyfriend's Day</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#ffe3ec;--ink:#4a1d3f;--card:#fff8e6;--pink:#ff5d8f;--soft:#ffb3cd;--butter:#ffd86b;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2a1224;--ink:#ffe3ec;--card:#4a2140;--pink:#ff6f9d;--soft:#7a3a63;--butter:#ffd86b}}
+:root[data-theme="dark"]{--bg:#2a1224;--ink:#ffe3ec;--card:#4a2140;--pink:#ff6f9d;--soft:#7a3a63;--butter:#ffd86b}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Baloo 2",system-ui,sans-serif;text-align:center;min-height:100vh;overflow-x:hidden}
+main{max-width:520px;margin:0 auto;padding:36px 20px 60px}
+h1{font-size:clamp(2.3rem,10vw,3.4rem);line-height:1;margin:10px 0 6px;font-weight:800}
+.name{color:var(--pink);border-bottom:4px dotted var(--soft);outline:none;display:inline-block;min-width:3ch}
+.hand{font-family:Caveat,cursive;font-size:1.6rem;margin:0 0 28px}
+.bear{font-size:5rem;display:inline-block;cursor:pointer;animation:bob 2.4s ease-in-out infinite;user-select:none}
+.bear:active{transform:scale(.85)}
+@keyframes bob{50%{transform:translateY(-10px) rotate(-4deg)}}
+section{background:var(--card);border-radius:28px;padding:26px 22px;margin:22px 0;box-shadow:0 6px 0 var(--soft)}
+h2{margin:0 0 14px;font-size:1.5rem}
+.reason{font-family:Caveat,cursive;font-size:1.8rem;min-height:5.2rem;display:flex;align-items:center;justify-content:center;line-height:1.15}
+button{font:inherit;font-weight:800;font-size:1.15rem;border:0;border-radius:999px;padding:12px 26px;cursor:pointer;background:var(--pink);color:#fff;box-shadow:0 4px 0 rgba(0,0,0,.18);transition:transform .1s}
+button:active{transform:translateY(3px);box-shadow:none}
+button:focus-visible{outline:3px solid var(--butter);outline-offset:3px}
+.count{opacity:.7;margin:10px 0 0;font-size:.95rem}
+.ask{position:relative;height:130px}
+#no{background:var(--soft);color:var(--ink);position:absolute;left:55%;top:70px}
+#yes{position:absolute;left:12%;top:70px}
+#q{font-size:1.4rem;font-weight:800;margin:0}
+.heart{position:fixed;top:-30px;font-size:1.6rem;pointer-events:none;animation:fall linear forwards;z-index:9}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.bear{animation:none}.heart{display:none}}
+</style>
+</head>
+<body>
+<main>
+  <div class="bear" id="bear" role="button" aria-label="Tap for hearts" tabindex="0">🧸</div>
+  <h1>Happy Boyfriend's Day,<br><span class="name" contenteditable="true" spellcheck="false" id="nm">my love</span>!</h1>
+  <p class="hand">I made you a tiny website because you're worth the effort 💕</p>
+
+  <section>
+    <h2>Reasons I adore you</h2>
+    <div class="reason" id="reason" aria-live="polite">Tap the button to find out…</div>
+    <p class="count" id="count"></p>
+    <button id="next">Next reason</button>
+  </section>
+
+  <section>
+    <p id="q">Will you be my boyfriend forever?</p>
+    <div class="ask" id="ask">
+      <button id="yes">Yes! 💖</button>
+      <button id="no">No</button>
+    </div>
+  </section>
+
+  <p class="hand">Made with love, just for you 🌷</p>
+</main>
+<script>
+// ✏️ Edit these reasons to make them yours:
+var reasons=[
+  "You make my worst days feel lighter.",
+  "Your laugh is my favourite sound.",
+  "You always know when I need a hug.",
+  "You listen, even to my long stories.",
+  "You make ordinary plans feel like adventures.",
+  "You're my best friend and my favourite person.",
+  "You make me feel safe and silly at once.",
+  "Being with you just feels like home."
+];
+var i=0,order=reasons.slice().sort(function(){return Math.random()-.5});
+var r=document.getElementById('reason'),c=document.getElementById('count');
+document.getElementById('next').onclick=function(){
+  r.textContent=order[i%order.length];i++;
+  c.textContent="Reason "+((i-1)%order.length+1)+" of "+order.length;
+  hearts(4);
+};
+function hearts(n){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  var e=['💖','💕','💗','🌷','✨'];
+  for(var k=0;k<n;k++){
+    var h=document.createElement('div');h.className='heart';
+    h.textContent=e[Math.floor(Math.random()*e.length)];
+    h.style.left=Math.random()*95+'vw';
+    h.style.animationDuration=(2.5+Math.random()*2)+'s';
+    document.body.appendChild(h);
+    setTimeout(function(x){x.remove()},5200,h);
+  }
+}
+var bear=document.getElementById('bear');
+bear.onclick=function(){hearts(14)};
+bear.onkeydown=function(e){if(e.key==='Enter'||e.key===' ')hearts(14)};
+
+var no=document.getElementById('no'),ask=document.getElementById('ask');
+function dodge(){
+  var w=ask.clientWidth-no.offsetWidth,h=ask.clientHeight-no.offsetHeight;
+  no.style.left=Math.random()*w+'px';no.style.top=Math.random()*h+'px';
+}
+no.addEventListener('mouseenter',dodge);
+no.addEventListener('touchstart',function(e){e.preventDefault();dodge()});
+no.onclick=dodge;
+document.getElementById('yes').onclick=function(){
+  var nm=document.getElementById('nm').textContent.trim()||'love';
+  document.getElementById('q').textContent="Yay! Forever it is, "+nm+" 🥰";
+  ask.style.display='none';
+  hearts(40);setTimeout(function(){hearts(30)},900);
+};
+</script>
+</body>
+</html>
